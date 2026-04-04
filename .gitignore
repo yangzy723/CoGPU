@@ -8,3 +8,5 @@ test.sh
 *.nsys-rep
 *.o
 scheduler_service
+
+/CoGPU_test

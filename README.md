@@ -1,4 +1,4 @@
-# FlexMPS
+# CoGPU
 ## General
 
 ```shell
@@ -10,8 +10,8 @@ conda activate <CONDA_NAME>
 
 ```shell
 # code
-git clone https://github.com/yangzy723/FlexMPS.git
-cd FlexMPS
+git clone https://github.com/yangzy723/CoGPU.git
+cd CoGPU
 git submodule sync
 git submodule update --init --recursive
 ```
@@ -89,7 +89,7 @@ nsys profile \
   --disable-cuda-graph
 ```
 
-## Prefill-Decode  Test
+## Prefill-Decode Test
 ```shell
 # 开启 MPS
 export CUDA_VISIBLE_DEVICES=0
@@ -123,10 +123,10 @@ bash run.sh
 
 ## Versions
 
-|模块名称       | 版本  |
-|--------------|------|
-|cuda          |12.9  |
-|python        |3.11  |
-|torch         |2.8.0 |
-|sglang        |0.5.4 |
-|flashinfer    |0.4.1 |
+|模块名称                   | 版本  |
+|--------------------------|------|
+|cuda                      |12.9  |
+|python                    |3.11  |
+|torch                     |2.8.0 |
+|sglang                    |0.5.4 |
+|flashinfer (Useless)      |0.4.1 |
