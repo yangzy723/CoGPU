@@ -38,8 +38,8 @@ hatches = ['', '///', '\\\\\\', 'xxx', '...', '']
 x = np.arange(len(categories))
 width = 0.12
 
-# 调整画布大小，使其更适合双栏横跨布局（更扁平紧凑）
-fig, axes = plt.subplots(2, 1, figsize=(10, 6.8)) 
+# 调整画布大小，使其更适合双栏横跨布局
+fig, axes = plt.subplots(2, 1, figsize=(10, 7.2)) # 稍微增加了一点总高度以容纳更大的字体
 
 # ========== 3. 核心绘制逻辑 ==========
 def draw_bars(ax, data_dict, is_throughput):
@@ -71,13 +71,13 @@ def draw_bars(ax, data_dict, is_throughput):
             if sys == 'LithOS':
                 label_text += '*'
                 
-            # 调整：字号调大为10.5，颜色略加深以保证可读性
+            # 全面调大数值标签：字号调大为 12
             ax.annotate(label_text,
                          xy=(bar.get_x() + bar.get_width() / 2, height),
                          xytext=(0, 4), # 距离柱子顶部 4 个像素
                          textcoords="offset points",
                          ha='center', va='bottom', rotation=90,
-                         fontweight='bold', fontsize=10.5, color='#222222')
+                         fontweight='bold', fontsize=12, color='#222222')
 
 # 执行绘制
 draw_bars(axes[0], throughput_data, is_throughput=True)
@@ -85,16 +85,19 @@ draw_bars(axes[1], latency_data, is_throughput=False)
 
 # ========== 4. 坐标轴与背景美化 ==========
 def format_axis(ax, ylabel, title, ymax):
-    ax.set_ylabel(ylabel, fontsize=12, fontweight='bold')
-    # 标题字体放大，左对齐，距离图像留出呼吸空间
-    ax.set_title(title, fontsize=13, fontweight='bold', loc='left', pad=12)
+    # 放大Y轴标签
+    ax.set_ylabel(ylabel, fontsize=14, fontweight='bold')
+    # 放大标题，增加 padding 避免与上面的图例或数字太挤
+    ax.set_title(title, fontsize=15, fontweight='bold', loc='left', pad=14)
     
     ax.set_xticks(x)
-    ax.set_xticklabels(categories, fontsize=12, fontweight='bold')
+    # 放大X轴类别刻度
+    ax.set_xticklabels(categories, fontsize=14, fontweight='bold')
     
-    # Y轴留出额外 20% 的空间给数值标签
-    ax.set_ylim(0, ymax * 1.25) 
-    ax.tick_params(axis='y', labelsize=11)
+    # Y轴留出额外 30% 的空间给变大后的数值标签 (原为 25%)
+    ax.set_ylim(0, ymax * 1.30) 
+    # 放大Y轴数字刻度
+    ax.tick_params(axis='y', labelsize=13)
     
     # 极简网格线：只保留Y轴虚线网格，并将层级放到底部 (zorder=0)
     ax.yaxis.grid(True, linestyle='--', color='#cccccc', alpha=0.7, zorder=0)
@@ -115,22 +118,22 @@ for i in range(len(labels)):
     if labels[i] == 'LithOS':
         labels[i] = 'LithOS (No Semantic Determinism Guarantee)'
 
-# 调整：将图例左对齐，0.06 的 X 坐标大致与子图的左侧边缘对齐
+# 图例左对齐，整体字号放大为 13.5
 fig.legend(handles, labels, 
            loc='lower left', 
-           bbox_to_anchor=(0.06, 0.96), 
+           bbox_to_anchor=(0.06, 0.95), 
            ncol=3, 
            frameon=False, 
-           fontsize=12, 
+           fontsize=13.5, 
            handlelength=2.5, 
            handleheight=1.2,
-           columnspacing=2.0) # 增加列间距，避免文字拥挤
+           columnspacing=1.8) # 略微缩减列间距以确保 3 列不会超出右侧边界
 
 # 调整子图布局
 plt.tight_layout()
-# 微调 top 边距，确保左对齐的图例有足够空间
-plt.subplots_adjust(top=0.9, hspace=0.45) 
+# 增大 hspace 为 0.5，防止图(a)底部数字和图(b)的标题打架；top 下调至 0.86 给大图例让路
+plt.subplots_adjust(top=0.86, hspace=0.5) 
 
 # 导出为无损 PDF，bbox_inches='tight' 裁剪多余白边
-plt.savefig('DNNTraining_with_LLMInference.pdf', bbox_inches='tight', format='pdf')
+plt.savefig('DNNTraining_with_LLMInference_LargeFont.pdf', bbox_inches='tight', format='pdf')
 # plt.show()
